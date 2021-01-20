@@ -1,6 +1,7 @@
 ﻿using Model.Mapper;
 using Model.Models;
 using Model.Repository;
+using Model.UnitOfWork;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,11 +11,13 @@ namespace Service.Service
     {
         private readonly IGenericRepository<Movie> _movieRepository;
         private readonly IGenericRepository<Sales> _salesRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public MoviesService(IGenericRepository<Movie> movieRepository, IGenericRepository<Sales> salesRepository)
+        public MoviesService(IGenericRepository<Movie> movieRepository, IGenericRepository<Sales> salesRepository, IUnitOfWork unitOfWork)
         {
             _movieRepository = movieRepository;
             _salesRepository = salesRepository;
+            _unitOfWork = unitOfWork;
         }
         public IEnumerable<MovieViewModel> GetAll() => _movieRepository.GetAll().Map<Movie, MovieViewModel>(true);
 
@@ -23,13 +26,20 @@ namespace Service.Service
             Movie _movie = movie.Map<MovieViewModel, Movie>(true);
             Sales _sales = movie.Sales.Map<SalesViewModel, Sales>(true);
 
-            var result1 = _movieRepository.Insert(_movie);
-            _movieRepository.Save();
+            //var result1 = _movieRepository.Insert(_movie);
+            //_movieRepository.Save();
 
-            _sales.MovieId = result1.Id;
-            var result2 = _salesRepository.Insert(_sales);
-            _movieRepository.Save();
+            //_sales.MovieId = result1.Id;
+            //var result2 = _salesRepository.Insert(_sales);
+            //_movieRepository.Save();
+            var movieUnit = _unitOfWork.GetRepository<Movie>();
+            movieUnit.Insert(_movie);
 
+            _sales.MovieId = _movie.Id;
+            var salesUnit = _unitOfWork.GetRepository<Sales>();
+            salesUnit.Insert(_sales);
+
+            _unitOfWork.Save();
         }
 
         public void Update(MovieViewModel movie)

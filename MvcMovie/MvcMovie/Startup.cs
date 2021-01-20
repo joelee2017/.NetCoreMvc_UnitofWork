@@ -34,13 +34,16 @@ namespace MvcMovie
 
             //第二種版本
             // 注入 Interface
-            services.InJectionByInterface(new List<string>() { "Service", "Repository" });
+            services.InJectionByInterface(new List<string>() { "Service", "Repository"});
 
             // 注入 Class
-            services.InJectionByClass(new List<string>() { "Service", "Repository" });
+            services.InJectionByClass(new List<string>() { "Service", "Repository"});
 
             // 注入 Generic
-            services.InJectionByGeneric("Model", new List<string>() { "Repository" });
+            services.InJectionByGeneric("Model", new List<string>() { "Repository"});
+
+            // 注入 UnitOfWork
+            services.InJectionByUnitOfWork();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

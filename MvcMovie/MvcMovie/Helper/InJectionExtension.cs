@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Model.Data;
 using Model.Repository;
+using Model.UnitOfWork;
 using NetCore.AutoRegisterDi;
 using System;
 using System.Collections.Generic;
@@ -73,6 +74,16 @@ namespace MvcMovie.Helper
         }
 
         /// <summary>
+        /// UnitOfWork 注入
+        /// </summary>
+        /// <param name="services"></param>
+
+        public static void InJectionByUnitOfWork(this IServiceCollection services)
+        {
+            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
+        }
+
+        /// <summary>
         /// GenericRepository 注入
         /// </summary>
         /// <param name="services"></param>
@@ -103,6 +114,7 @@ namespace MvcMovie.Helper
         /// <param name="configuration"></param>
         public static void InJectionByDbContext(this IServiceCollection services, string configuration)
         {
+            //services.AddDbContext<DbContext>();
             services.AddDbContext<MvcMovieContext>(options => options.UseSqlServer(configuration));
         }
     }
