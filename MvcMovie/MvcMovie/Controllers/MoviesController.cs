@@ -1,22 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Model.Mapper;
 using Model.Models;
 using Service.Service;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace MvcMovie.Controllers
 {
     public class MoviesController : Controller
     {
-        private readonly IRepository<Movie, MovieViewModel> _movieRepository;
         private readonly IMoviesService _moviesService;
 
-        public MoviesController(IRepository<Movie, MovieViewModel> movieRepository, IMoviesService moviesService)
+        public MoviesController(IMoviesService moviesService)
         {
-            _movieRepository = movieRepository;
             _moviesService = moviesService;
         }
 
@@ -84,7 +80,7 @@ namespace MvcMovie.Controllers
                 return NotFound();
             }
 
-            var movie = _movieRepository.Find(id.Value);
+            var movie = _moviesService.Find(id.Value);
             if (movie == null)
             {
                 return NotFound();
@@ -108,7 +104,7 @@ namespace MvcMovie.Controllers
             {
                 try
                 {
-                    _movieRepository.Update(movie);
+                    _moviesService.Update(movie);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -134,7 +130,7 @@ namespace MvcMovie.Controllers
                 return NotFound();
             }
 
-            var movie = _movieRepository.FirstOrDefault(m => m.Id == id);
+            var movie = _moviesService.Find(id);
             if (movie == null)
             {
                 return NotFound();
@@ -148,13 +144,13 @@ namespace MvcMovie.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {            
-            _movieRepository.Remove(id);    
+            _moviesService.Remove(id);    
             return RedirectToAction(nameof(Index));
         }
 
         private bool MovieExists(int id)
         {
-            return _movieRepository.GetAll().Any(e => e.Id == id);
+            return _moviesService.GetAll().Any(e => e.Id == id);
         }
     }
 }

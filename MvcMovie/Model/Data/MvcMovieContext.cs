@@ -11,5 +11,7 @@ namespace Model.Data
         }
 
         public DbSet<Movie> Movie { get; set; }
+
+        public DbSet<Sales> Sales { get; set; }
     }
 }

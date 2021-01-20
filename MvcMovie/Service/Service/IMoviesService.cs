@@ -1,5 +1,7 @@
 ﻿using Model.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace Service.Service
 {
@@ -11,9 +13,11 @@ namespace Service.Service
 
         public IEnumerable<MovieViewModel> GetAll();
 
-        public MovieViewModel Add(Movie movie);
+        public MovieViewModel Find(object id);
 
-        public MovieViewModel Update(Movie movie);
+        public void Add(Movie movie);
+
+        public void Update(Movie movie);
 
         public void Remove(int id);
     }
