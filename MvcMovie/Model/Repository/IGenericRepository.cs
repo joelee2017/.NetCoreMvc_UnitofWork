@@ -11,8 +11,8 @@ namespace Model.Repository
         IQueryable<TEntity> Query(Expression<Func<TEntity, bool>> predicate);
 
         TEntity GetById(object id);
-        void Insert(TEntity obj);
-        void Update(TEntity obj);
+        TEntity Insert(TEntity obj);
+        TEntity Update(TEntity obj);
         void Delete(object id);
         void Save();
     }

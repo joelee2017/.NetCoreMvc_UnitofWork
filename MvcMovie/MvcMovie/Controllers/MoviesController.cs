@@ -62,7 +62,7 @@ namespace MvcMovie.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,Title,ReleaseDate,Genre,Price,Rating")] Movie movie)
+        public IActionResult Create([Bind("Id,Title,ReleaseDate,Genre,Price,Rating,Sales")] MovieViewModel movie)
         {
             if (ModelState.IsValid)
             {
@@ -93,7 +93,7 @@ namespace MvcMovie.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("Id,Title,ReleaseDate,Genre,Price,Rating")] Movie movie)
+        public IActionResult Edit(int id, [Bind("Id,Title,ReleaseDate,Genre,Price,Rating,Sales")] MovieViewModel movie)
         {
             if (id != movie.Id)
             {

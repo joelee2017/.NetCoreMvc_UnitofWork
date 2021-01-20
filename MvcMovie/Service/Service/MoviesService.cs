@@ -9,18 +9,41 @@ namespace Service.Service
     public class MoviesService : IMoviesService
     {
         private readonly IGenericRepository<Movie> _movieRepository;
+        private readonly IGenericRepository<Sales> _salesRepository;
 
-        public MoviesService(IGenericRepository<Movie> movieRepository)
+        public MoviesService(IGenericRepository<Movie> movieRepository, IGenericRepository<Sales> salesRepository)
         {
             _movieRepository = movieRepository;
+            _salesRepository = salesRepository;
         }
         public IEnumerable<MovieViewModel> GetAll() => _movieRepository.GetAll().Map<Movie, MovieViewModel>(true);
 
-        public void Add(Movie movie) => _movieRepository.Insert(movie);
+        public void Add(MovieViewModel movie)
+        {
+            Movie _movie = movie.Map<MovieViewModel, Movie>(true);
+            Sales _sales = movie.Sales.Map<SalesViewModel, Sales>(true);
 
-        public void Update(Movie movie) => _movieRepository.Update(movie);
+            var result1 = _movieRepository.Insert(_movie);
+            _movieRepository.Save();
 
-        public void Remove(int id) => _movieRepository.Delete(id);
+            _sales.MovieId = result1.Id;
+            var result2 = _salesRepository.Insert(_sales);
+            _movieRepository.Save();
+
+        }
+
+        public void Update(MovieViewModel movie)
+        {
+            Movie _movie = movie.Map<MovieViewModel, Movie>(true);
+            _movieRepository.Update(_movie);
+            _movieRepository.Save();
+        }
+
+        public void Remove(int id)
+        {
+            _movieRepository.Delete(id);
+            _movieRepository.Save();
+        }
 
         public IEnumerable<string> GenreQuery()
         {

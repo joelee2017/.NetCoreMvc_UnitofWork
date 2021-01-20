@@ -31,14 +31,17 @@ namespace Model.Repository
         {
             return table.Find(id);
         }
-        public void Insert(TEntity obj)
+        public TEntity Insert(TEntity obj)
         {
-            table.Add(obj);
+            var result = table.Add(obj);
+            return result.Entity;
         }
-        public void Update(TEntity obj)
+        public TEntity Update(TEntity obj)
         {
-            table.Attach(obj);
+           var resut = table.Attach(obj);
             _context.Entry(obj).State = EntityState.Modified;
+
+            return resut.Entity;
         }
         public void Delete(object id)
         {
