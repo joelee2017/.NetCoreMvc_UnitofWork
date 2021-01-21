@@ -80,7 +80,7 @@ namespace MvcMovie.Helper
 
         public static void InJectionByUnitOfWork(this IServiceCollection services)
         {
-            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         /// <summary>

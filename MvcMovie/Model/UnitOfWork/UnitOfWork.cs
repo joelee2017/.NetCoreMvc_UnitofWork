@@ -6,21 +6,27 @@ using System.Collections;
 
 namespace Model.UnitOfWork
 {
-    public class UnitOfWork<C> : IDisposable, IUnitOfWork where C : MvcMovieContext, new()
+    public class UnitOfWork : IDisposable, IUnitOfWork
     {
-        private C context = new C();
+        private MvcMovieContext _context;
         private Hashtable repositories = new Hashtable();
+
+        public UnitOfWork(MvcMovieContext context)
+        {
+            _context = context;
+        }
+
         public IGenericRepository<T> GetRepository<T>() where T : class
         {
             if (!repositories.Contains(typeof(T)))
             {
-                repositories.Add(typeof(T), new GenericRepository<T>(context));
+                repositories.Add(typeof(T), new GenericRepository<T>(_context));
             }
             return (IGenericRepository<T>)repositories[typeof(T)];
         }
         public void Save()
         {
-            context.SaveChanges();
+            _context.SaveChanges();
         }
         private bool disposed = false;
         protected virtual void Dispose(bool disposing)
@@ -29,7 +35,7 @@ namespace Model.UnitOfWork
             {
                 if (disposing)
                 {
-                    context.Dispose();
+                    _context.Dispose();
                 }
             }
             this.disposed = true;

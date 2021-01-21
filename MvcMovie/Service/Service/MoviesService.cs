@@ -32,14 +32,22 @@ namespace Service.Service
             //_sales.MovieId = result1.Id;
             //var result2 = _salesRepository.Insert(_sales);
             //_movieRepository.Save();
-            var movieUnit = _unitOfWork.GetRepository<Movie>();
-            movieUnit.Insert(_movie);
 
-            _sales.MovieId = _movie.Id;
-            var salesUnit = _unitOfWork.GetRepository<Sales>();
-            salesUnit.Insert(_sales);
+            try
+            {
+                var movieUnit = _unitOfWork.GetRepository<Movie>();
+                movieUnit.Insert(_movie);
 
-            _unitOfWork.Save();
+                _sales.MovieId = _movie.Id; //當前無法取得Movie id
+                var salesUnit = _unitOfWork.GetRepository<Sales>();
+                salesUnit.Insert(_sales);
+                _unitOfWork.Save();
+            }
+            catch (System.Exception)
+            {
+                _unitOfWork.Dispose();
+            }
+
         }
 
         public void Update(MovieViewModel movie)
