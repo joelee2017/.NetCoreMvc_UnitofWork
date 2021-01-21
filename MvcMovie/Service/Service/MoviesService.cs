@@ -21,6 +21,7 @@ namespace Service.Service
         }
         public IEnumerable<MovieViewModel> GetAll() => _movieRepository.GetAll().Map<Movie, MovieViewModel>(true);
 
+        // 實作 UnitOfWork Add
         public void Add(MovieViewModel movie)
         {
             Movie _movie = movie.Map<MovieViewModel, Movie>(true);
@@ -38,7 +39,7 @@ namespace Service.Service
                 var movieUnit = _unitOfWork.GetRepository<Movie>();
                 movieUnit.Insert(_movie);
 
-                _sales.MovieId = _movie.Id; //當前無法取得Movie id
+                _sales.MovieId = _movie.Id; //未交易前，當前無法取得Movie id
                 var salesUnit = _unitOfWork.GetRepository<Sales>();
                 salesUnit.Insert(_sales);
                 _unitOfWork.Save();
