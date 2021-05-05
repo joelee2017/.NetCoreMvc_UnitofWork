@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,6 +25,7 @@ namespace MvcMovie
 
             // 注入 DB
             services.InJectionByDbContext(Configuration.GetConnectionString("MvcMovieContext"));
+            services.AddScoped<DbContext>();
 
             //第一種版本
             // 注入 Repository

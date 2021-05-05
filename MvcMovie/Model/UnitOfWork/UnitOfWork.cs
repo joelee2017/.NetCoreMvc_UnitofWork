@@ -33,7 +33,7 @@ namespace Model.UnitOfWork
 
             if (!repositories.ContainsKey(type))
             {
-                var repositoryType = typeof(GenericRepository<>);
+                var repositoryType = typeof(GenericRepository<T>);
 
                 var repositoryInstance =
                     Activator.CreateInstance(repositoryType
